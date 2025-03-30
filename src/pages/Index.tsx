@@ -9,6 +9,7 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import PlayerModal from "@/components/PlayerModal";
 import OnlineCounter from "@/components/OnlineCounter";
+import backgroundImage from '../assets/background.jpg';
 
 const APIS = {
   current: 'https://api.coralmc.it/api/leaderboard/bedwars/winstreak',
@@ -207,14 +208,14 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#051428] to-[#020a14]" ref={containerRef}>
-      <div className="absolute inset-0 bg-[url('https://i.imgur.com/t92CMbU.jpg')] bg-cover bg-center opacity-20 z-0 bg-fixed"></div>
+      <div className="absolute inset-0 bg-cover bg-center opacity-20 z-0 bg-fixed" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
       
       <div className="max-w-6xl mx-auto px-4 py-8 relative z-10">
         <div className="bg-[#0a2956]/90 backdrop-blur-sm border border-[#3498db]/30 rounded-lg p-6 mb-8 shadow-xl">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6">
             <h1 className="text-3xl md:text-4xl text-white font-bold mb-4 md:mb-0 flex flex-col sm:flex-row items-center gap-2">
-              <span className="text-[#3498db]">Coral</span>
-              <span>MC Winstreak</span>
+              <span className="text-[#3498db]">CoralMC</span>
+              <span>Top Winstreak</span>
             </h1>
             
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -259,7 +260,7 @@ const Index = () => {
             <span className="text-sm font-normal text-gray-400 ml-2">({playersToRender.length} players)</span>
           </h2>
           
-          <div className="grid gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {playersToRender.slice(startIndex, startIndex + PLAYERS_PER_PAGE).map((player) => (
               <LeaderboardEntry 
                 key={`${player.name}-${player.globalRank}`}
