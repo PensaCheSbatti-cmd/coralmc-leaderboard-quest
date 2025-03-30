@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,7 @@ import { toast } from "sonner";
 import MinecraftBackground from "@/components/MinecraftBackground";
 import PlayerModal from "@/components/PlayerModal";
 import OnlineCounter from "@/components/OnlineCounter";
-import { DiscordLogoIcon, ArrowUpIcon } from "@radix-ui/react-icons";
+import { ArrowUp, Discord } from "lucide-react";
 
 const APIS = {
   current: 'https://api.coralmc.it/api/leaderboard/bedwars/winstreak',
@@ -167,7 +166,7 @@ const Index = () => {
             rel="noopener noreferrer"
             className="discord-button flex items-center justify-center gap-2 mx-auto mb-4"
           >
-            <DiscordLogoIcon className="h-5 w-5" />
+            <Discord className="h-5 w-5" />
             Join our Discord server
           </a>
           
@@ -251,7 +250,7 @@ const Index = () => {
           className="fixed bottom-6 right-6 z-50 minecraft-button"
           onClick={scrollToTop}
         >
-          <ArrowUpIcon className="h-5 w-5" />
+          <ArrowUp className="h-5 w-5" />
         </Button>
       )}
       
