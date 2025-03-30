@@ -43,9 +43,9 @@ const PlayerModal = ({ player, uuid, onClose }: PlayerModalProps) => {
   return (
     <>
       <div className="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-40" />
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-gradient-to-br from-[#2d1b47] to-[#1e1433] border border-[#634caf]/50 p-6 w-[300px] md:w-[400px] text-center rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-gradient-to-br from-[#0a2956] to-[#051428] border border-[#3498db]/50 p-6 w-[300px] md:w-[400px] text-center rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
         <button 
-          className="absolute top-2 right-2 bg-[#f43f5e] text-white p-1 rounded-md hover:bg-[#e11d48] transition-colors"
+          className="absolute top-2 right-2 bg-[#e74c3c] text-white p-1 rounded-md hover:bg-[#c0392b] transition-colors"
           onClick={onClose}
         >
           <X size={18} />
@@ -54,7 +54,7 @@ const PlayerModal = ({ player, uuid, onClose }: PlayerModalProps) => {
         <h3 className="text-xl font-bold text-white mb-2">{player.name}</h3>
         
         {player.clan && (
-          <div className="clan-tag bg-[#634caf]/20 inline-block px-3 py-1 rounded-full text-[#a78bfa] text-sm mb-4">
+          <div className="clan-tag bg-[#1e3356] inline-block px-3 py-1 rounded-full text-[#3498db] text-sm mb-4">
             {player.clan}
           </div>
         )}
@@ -68,20 +68,20 @@ const PlayerModal = ({ player, uuid, onClose }: PlayerModalProps) => {
           />
         </div>
         
-        <div className="player-stats space-y-3 text-sm bg-[#1a1625]/70 p-4 rounded-lg border border-[#634caf]/20">
+        <div className="player-stats space-y-3 text-sm bg-[#051428] p-4 rounded-lg border border-[#3498db]/20">
           <div className="stat-row flex justify-between">
             <span className="text-gray-300">Level:</span>
-            <span className="text-[#ffcd4a]">{player.livello || 'N/A'}</span>
+            <span className="text-[#f1c40f]">{player.livello || 'N/A'}</span>
           </div>
           
           <div className="stat-row flex justify-between">
             <span className="text-gray-300">Current WS:</span>
-            <span className="text-[#8b5cf6]">{player.winstreak}</span>
+            <span className="text-[#3498db]">{player.winstreak}</span>
           </div>
           
           <div className="stat-row flex justify-between">
             <span className="text-gray-300">Highest WS:</span>
-            <span className="text-[#ffcd4a]">{player.highest_winstreak}</span>
+            <span className="text-[#f1c40f]">{player.highest_winstreak}</span>
           </div>
           
           {player.kills !== undefined && (
