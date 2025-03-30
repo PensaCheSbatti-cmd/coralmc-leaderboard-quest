@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,10 @@ import MinecraftBackground from "@/components/MinecraftBackground";
 import PlayerModal from "@/components/PlayerModal";
 import OnlineCounter from "@/components/OnlineCounter";
 import { ArrowUp, MessageSquare } from "lucide-react";
+import LeaderboardHeader from "@/components/LeaderboardHeader";
+import LeaderboardEntry from "@/components/LeaderboardEntry";
+import Pagination from "@/components/Pagination";
+import SearchBar from "@/components/SearchBar";
 
 const APIS = {
   current: 'https://api.coralmc.it/api/leaderboard/bedwars/winstreak',
@@ -16,13 +21,6 @@ const CORS_PROXY = 'https://api.allorigins.win/get?url=';
 const STEVE_UUID = 'c06f89064c8a49119c29ea1dbd1aab82';
 const PLAYERS_PER_PAGE = 10;
 const TOTAL_PAGES = 10;
-
-interface Player {
-  name: string;
-  winstreak: number;
-  highest_winstreak: number;
-  globalRank: number;
-}
 
 const Index = () => {
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
@@ -147,107 +145,55 @@ const Index = () => {
   const startIndex = (currentPage - 1) * PLAYERS_PER_PAGE;
   
   return (
-    <div className="relative min-h-screen overflow-hidden" ref={containerRef}>
+    <div className="relative min-h-screen bg-gradient-to-b from-[#241b2f] to-[#1a1625]" ref={containerRef}>
       <MinecraftBackground />
       
-      <div className="max-w-4xl mx-auto px-4 py-6 relative z-10">
-        <header className="minecraft-panel relative">
-          <div className="absolute top-2 right-2">
-            <OnlineCounter />
-          </div>
-          
-          <h1 className="text-2xl md:text-4xl text-white text-center mb-4">
-            <span className="text-mc-gold">CoralMC</span> - Ultimate Winstreak Leaderboard
-          </h1>
-          
-          <a 
-            href="https://discord.gg/mA9r6DbW4A" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="discord-button flex items-center justify-center gap-2 mx-auto mb-4"
-          >
-            <MessageSquare className="h-5 w-5" />
-            Join our Discord server
-          </a>
-          
-          <div className="status-bar px-4 py-2 text-mc-green text-sm rounded">
-            Status: {status} | Updated: {lastUpdated}
-          </div>
-        </header>
+      <div className="max-w-5xl mx-auto px-4 py-8 relative z-10">
+        <LeaderboardHeader 
+          status={status} 
+          lastUpdated={lastUpdated} 
+        />
         
-        <div className="section-divider my-6"></div>
+        <SearchBar 
+          searchTerm={searchTerm} 
+          handleSearch={handleSearch} 
+          isLoading={isLoading} 
+          fetchData={fetchData}
+          currentLeaderboard={currentLeaderboard}
+          toggleLeaderboard={toggleLeaderboard}
+        />
         
-        <div className="search-box text-center mb-6">
-          <Input 
-            type="text" 
-            placeholder="Search player..." 
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="minecraft-input w-full md:w-80 mb-4"
-          />
-          
-          <div className="search-buttons flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              onClick={fetchData} 
-              disabled={isLoading}
-              className="minecraft-button"
-            >
-              {isLoading ? "Loading..." : "Refresh"}
-            </Button>
-            
-            <Button 
-              onClick={toggleLeaderboard}
-              className="minecraft-button"
-            >
-              {currentLeaderboard === 'current' ? 'Top MAX WS' : 'Top Current WS'}
-            </Button>
-          </div>
-        </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalPages={Math.ceil(playersToRender.length / PLAYERS_PER_PAGE) || TOTAL_PAGES} 
+          changePage={changePage} 
+          isLoading={isLoading}
+          hasMore={startIndex + PLAYERS_PER_PAGE < playersToRender.length}
+        />
         
-        <div className="section-divider my-6"></div>
-        
-        <div className="pagination flex items-center justify-between mb-6">
-          <Button 
-            onClick={() => changePage(-1)} 
-            disabled={currentPage === 1 || isLoading}
-            className="minecraft-button"
-          >
-            ◀ Prev
-          </Button>
-          
-          <div className="page-info">
-            Page {currentPage} of {Math.ceil(playersToRender.length / PLAYERS_PER_PAGE) || TOTAL_PAGES}
-          </div>
-          
-          <Button 
-            onClick={() => changePage(1)} 
-            disabled={currentPage === TOTAL_PAGES || startIndex + PLAYERS_PER_PAGE >= playersToRender.length || isLoading}
-            className="minecraft-button"
-          >
-            Next ▶
-          </Button>
-        </div>
-        
-        <div className="leaderboard-container space-y-2">
+        <div className="leaderboard-container space-y-2 my-4">
           {playersToRender.slice(startIndex, startIndex + PLAYERS_PER_PAGE).map((player) => (
-            <div 
+            <LeaderboardEntry 
               key={`${player.name}-${player.globalRank}`}
-              className="leaderboard-entry bg-black/50 backdrop-blur-sm border-4 border-mc-stone p-4 grid grid-cols-[60px_1fr_100px] items-center cursor-pointer hover:scale-[1.02] hover:translate-y-[-2px] hover:border-mc-green hover:shadow-[0_0_15px_#4CAF50] transition-all rounded-md"
+              player={player}
+              currentLeaderboard={currentLeaderboard}
               onClick={() => showPlayerStats(player)}
-            >
-              <div className="entry-rank text-xl text-mc-gold text-center"># {player.globalRank}</div>
-              <div className="entry-name px-4 overflow-hidden text-ellipsis">{player?.name || 'Anonymous'}</div>
-              <div className="entry-ws text-right text-mc-green">
-                {currentLeaderboard === 'current' ? player.winstreak : player.highest_winstreak} WS
-              </div>
-            </div>
+            />
           ))}
         </div>
+        
+        <Pagination 
+          currentPage={currentPage} 
+          totalPages={Math.ceil(playersToRender.length / PLAYERS_PER_PAGE) || TOTAL_PAGES} 
+          changePage={changePage} 
+          isLoading={isLoading}
+          hasMore={startIndex + PLAYERS_PER_PAGE < playersToRender.length}
+        />
       </div>
       
       {showScrollTop && (
         <Button 
-          className="fixed bottom-6 right-6 z-50 minecraft-button"
+          className="fixed bottom-6 right-6 z-50 bg-[#634caf] hover:bg-[#523a9e] shadow-lg rounded-full p-3"
           onClick={scrollToTop}
         >
           <ArrowUp className="h-5 w-5" />

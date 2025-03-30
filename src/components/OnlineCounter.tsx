@@ -23,9 +23,9 @@ const OnlineCounter = () => {
   }, []);
   
   return (
-    <div className="online-counter text-mc-green text-sm bg-black/60 backdrop-blur-sm px-3 py-1 rounded-md border border-mc-dark-stone flex items-center gap-2">
+    <div className="online-counter text-sm font-medium bg-[#1a1625]/70 backdrop-blur-sm px-3 py-1 rounded-md border border-[#634caf]/20 flex items-center gap-2">
       <span className="animate-pulse inline-block w-2 h-2 bg-green-500 rounded-full"></span>
-      <span>{onlineUsers} online</span>
+      <span className="text-green-400">{onlineUsers} online</span>
     </div>
   );
 };

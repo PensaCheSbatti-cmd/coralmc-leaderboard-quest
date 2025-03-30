@@ -24,14 +24,14 @@ const MinecraftBackground = () => {
       
       // Create a dark gradient background
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#1a1a1a');
-      gradient.addColorStop(1, '#323232');
+      gradient.addColorStop(0, '#241b2f');
+      gradient.addColorStop(1, '#1a1625');
       
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       // Add subtle grid pattern
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      ctx.strokeStyle = 'rgba(99, 76, 175, 0.05)';
       ctx.lineWidth = 1;
       
       const gridSize = 40;
@@ -53,7 +53,7 @@ const MinecraftBackground = () => {
       }
       
       // Add floating particles
-      ctx.fillStyle = 'rgba(76, 175, 80, 0.15)';
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.15)';
       for (let i = 0; i < 100; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
