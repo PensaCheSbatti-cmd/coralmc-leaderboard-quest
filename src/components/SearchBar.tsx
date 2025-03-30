@@ -1,13 +1,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchIcon, RefreshCw, Award } from "lucide-react";
 
 interface SearchBarProps {
   searchTerm: string;
   handleSearch: (value: string) => void;
   isLoading: boolean;
   fetchData: () => void;
-  currentLeaderboard: string;
+  currentLeaderboard: 'current' | 'highest';
   toggleLeaderboard: () => void;
 }
 
@@ -20,32 +21,35 @@ const SearchBar = ({
   toggleLeaderboard 
 }: SearchBarProps) => {
   return (
-    <div className="search-container bg-gradient-to-r from-[#2d1b47]/90 to-[#1e1433]/90 border border-[#634caf]/30 rounded-lg p-4 mb-6">
+    <div className="search-container bg-[#0a2956]/90 border border-[#3498db]/30 rounded-lg p-5 mb-6 shadow-lg">
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
+        <div className="flex-1 relative">
+          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3498db] h-5 w-5" />
           <Input 
             type="text" 
             placeholder="Search player..." 
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
-            className="bg-[#1a1625] border-[#634caf]/30 focus:border-[#8b5cf6] text-white h-12"
+            className="bg-[#051428] border-[#3498db]/30 focus:border-[#3498db] text-white h-12 pl-10"
           />
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <Button 
             onClick={fetchData} 
             disabled={isLoading}
-            className="bg-[#634caf] hover:bg-[#523a9e] text-white flex-1 h-12"
+            className="bg-[#3498db] hover:bg-[#2980b9] text-white flex-1 h-12"
           >
+            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
             {isLoading ? "Loading..." : "Refresh"}
           </Button>
           
           <Button 
             onClick={toggleLeaderboard}
-            className="bg-[#ffcd4a] hover:bg-[#e6b83e] text-[#1a1625] flex-1 h-12"
+            className="bg-[#1e3356] hover:bg-[#254270] text-white flex-1 h-12 border border-[#3498db]/50"
           >
-            {currentLeaderboard === 'current' ? 'Top MAX WS' : 'Top Current WS'}
+            <Award className="mr-2 h-4 w-4" />
+            {currentLeaderboard === 'current' ? 'Show Highest WS' : 'Show Current WS'}
           </Button>
         </div>
       </div>

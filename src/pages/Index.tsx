@@ -1,16 +1,14 @@
 
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import MinecraftBackground from "@/components/MinecraftBackground";
-import PlayerModal from "@/components/PlayerModal";
-import OnlineCounter from "@/components/OnlineCounter";
 import { ArrowUp, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import LeaderboardHeader from "@/components/LeaderboardHeader";
 import LeaderboardEntry from "@/components/LeaderboardEntry";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
+import PlayerModal from "@/components/PlayerModal";
+import OnlineCounter from "@/components/OnlineCounter";
 
 const APIS = {
   current: 'https://api.coralmc.it/api/leaderboard/bedwars/winstreak',
@@ -19,7 +17,7 @@ const APIS = {
 
 const CORS_PROXY = 'https://api.allorigins.win/get?url=';
 const STEVE_UUID = 'c06f89064c8a49119c29ea1dbd1aab82';
-const PLAYERS_PER_PAGE = 6; // Changed to 6 to match the grid layout
+const PLAYERS_PER_PAGE = 10; // Changed to 10 per your requirements
 const TOTAL_PAGES = 10;
 
 const Index = () => {
@@ -141,15 +139,31 @@ const Index = () => {
   };
   
   const changePage = (offset: number) => {
-    const newPage = currentPage + offset;
-    if (newPage > 0 && newPage <= TOTAL_PAGES) {
-      setCurrentPage(newPage);
+    if (typeof offset === 'number' && !isNaN(offset)) {
+      let newPage;
       
-      // Fetch UUIDs for the players on the new page
-      const playersToRender = filteredPlayers.length > 0 ? filteredPlayers : allPlayers;
-      const startIndex = (newPage - 1) * PLAYERS_PER_PAGE;
-      const visiblePlayers = playersToRender.slice(startIndex, startIndex + PLAYERS_PER_PAGE);
-      fetchAllPlayerUuids(visiblePlayers);
+      if (Math.abs(offset) === 1) {
+        // Next/Prev navigation
+        newPage = currentPage + offset;
+      } else {
+        // Direct page selection
+        newPage = offset;
+      }
+      
+      if (newPage > 0 && newPage <= TOTAL_PAGES) {
+        setCurrentPage(newPage);
+        
+        // Scroll to top of leaderboard
+        if (containerRef.current) {
+          containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Fetch UUIDs for the players on the new page
+        const playersToRender = filteredPlayers.length > 0 ? filteredPlayers : allPlayers;
+        const startIndex = (newPage - 1) * PLAYERS_PER_PAGE;
+        const visiblePlayers = playersToRender.slice(startIndex, startIndex + PLAYERS_PER_PAGE);
+        fetchAllPlayerUuids(visiblePlayers);
+      }
     }
   };
   
@@ -189,27 +203,33 @@ const Index = () => {
   
   const playersToRender = filteredPlayers.length > 0 ? filteredPlayers : allPlayers;
   const startIndex = (currentPage - 1) * PLAYERS_PER_PAGE;
+  const maxPages = Math.ceil(playersToRender.length / PLAYERS_PER_PAGE) || TOTAL_PAGES;
   
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-[#0a2956] to-[#051428]" ref={containerRef}>
-      <div className="absolute inset-0 bg-[url('public/lovable-uploads/cbe1c930-9894-406b-ac27-4fe7c867964b.png')] bg-cover bg-center opacity-30 z-0"></div>
+    <div className="min-h-screen bg-gradient-to-b from-[#051428] to-[#020a14]" ref={containerRef}>
+      <div className="absolute inset-0 bg-[url('https://i.imgur.com/t92CMbU.jpg')] bg-cover bg-center opacity-20 z-0 bg-fixed"></div>
       
       <div className="max-w-6xl mx-auto px-4 py-8 relative z-10">
-        <div className="bg-[#0a2956]/80 backdrop-blur-sm border border-[#3498db]/30 rounded-lg p-6 mb-8">
+        <div className="bg-[#0a2956]/90 backdrop-blur-sm border border-[#3498db]/30 rounded-lg p-6 mb-8 shadow-xl">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-            <h1 className="text-3xl md:text-4xl text-white font-bold mb-4 md:mb-0">
-              <span className="text-[#3498db]">Coral</span>MC Winstreak
+            <h1 className="text-3xl md:text-4xl text-white font-bold mb-4 md:mb-0 flex flex-col sm:flex-row items-center gap-2">
+              <span className="text-[#3498db]">Coral</span>
+              <span>MC Winstreak</span>
             </h1>
             
-            <a 
-              href="https://discord.gg/mA9r6DbW4A" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white px-4 py-2 rounded-md transition-colors"
-            >
-              <MessageSquare className="h-5 w-5" />
-              Join Discord
-            </a>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <OnlineCounter />
+              
+              <a 
+                href="https://discord.gg/mA9r6DbW4A" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white px-4 py-2 rounded-md transition-colors"
+              >
+                <MessageSquare className="h-5 w-5" />
+                Join Discord
+              </a>
+            </div>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -220,65 +240,64 @@ const Index = () => {
               </span>
               <span className="text-gray-400 text-sm">• {lastUpdated}</span>
             </div>
-            
-            <div className="flex gap-4">
-              <Button 
-                onClick={fetchData}
-                disabled={isLoading}
-                className="bg-[#3498db] hover:bg-[#2980b9] text-white"
-              >
-                {isLoading ? "Loading..." : "Refresh"}
-              </Button>
-              
-              <Button 
-                onClick={toggleLeaderboard}
-                className="bg-[#1e3356] hover:bg-[#254270] text-white border border-[#3498db]"
-              >
-                {currentLeaderboard === 'current' ? 'Show Highest WS' : 'Show Current WS'}
-              </Button>
-            </div>
           </div>
         </div>
         
-        <div className="search-box mb-8">
-          <Input
-            type="text"
-            placeholder="Search player..."
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="bg-[#0a2956]/80 border-[#3498db]/50 text-white placeholder:text-gray-400 rounded-md py-5"
-          />
-        </div>
-        
-        <h2 className="text-2xl text-white font-bold mb-6 flex items-center gap-2">
-          <span className="h-8 w-1 bg-[#3498db] rounded"></span>
-          {currentLeaderboard === 'current' ? 'Current Winstreaks' : 'Highest Winstreaks'}
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {playersToRender.slice(startIndex, startIndex + PLAYERS_PER_PAGE).map((player) => (
-            <LeaderboardEntry 
-              key={`${player.name}-${player.globalRank}`}
-              player={player}
-              currentLeaderboard={currentLeaderboard}
-              onClick={() => showPlayerStats(player)}
-              uuid={playerUuids[player.name] || null}
-            />
-          ))}
-        </div>
-        
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={Math.ceil(playersToRender.length / PLAYERS_PER_PAGE) || TOTAL_PAGES} 
-          changePage={changePage} 
+        <SearchBar 
+          searchTerm={searchTerm}
+          handleSearch={handleSearch}
           isLoading={isLoading}
-          hasMore={startIndex + PLAYERS_PER_PAGE < playersToRender.length}
+          fetchData={fetchData}
+          currentLeaderboard={currentLeaderboard}
+          toggleLeaderboard={toggleLeaderboard}
         />
+        
+        <div className="mb-8">
+          <h2 className="text-2xl text-white font-bold mb-6 flex items-center gap-3 border-b border-[#3498db]/30 pb-3">
+            <span className="h-7 w-2 bg-[#3498db] rounded"></span>
+            {currentLeaderboard === 'current' ? 'Current Winstreaks' : 'Highest Winstreaks'}
+            <span className="text-sm font-normal text-gray-400 ml-2">({playersToRender.length} players)</span>
+          </h2>
+          
+          <div className="grid gap-6 mb-8">
+            {playersToRender.slice(startIndex, startIndex + PLAYERS_PER_PAGE).map((player) => (
+              <LeaderboardEntry 
+                key={`${player.name}-${player.globalRank}`}
+                player={player}
+                currentLeaderboard={currentLeaderboard}
+                onClick={() => showPlayerStats(player)}
+                uuid={playerUuids[player.name] || null}
+              />
+            ))}
+            
+            {playersToRender.length === 0 && !isLoading && (
+              <div className="col-span-full text-center py-10 bg-[#0a2956]/50 rounded-lg border border-[#3498db]/20">
+                <p className="text-gray-300">No players found</p>
+              </div>
+            )}
+            
+            {isLoading && playersToRender.length === 0 && (
+              <div className="col-span-full flex justify-center py-10">
+                <div className="w-12 h-12 border-4 border-[#3498db] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+          </div>
+          
+          {playersToRender.length > 0 && (
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={maxPages} 
+              changePage={changePage} 
+              isLoading={isLoading}
+              hasMore={startIndex + PLAYERS_PER_PAGE < playersToRender.length}
+            />
+          )}
+        </div>
       </div>
       
       {showScrollTop && (
         <Button 
-          className="fixed bottom-6 right-6 z-50 bg-[#3498db] hover:bg-[#2980b9] shadow-lg rounded-full p-3"
+          className="fixed bottom-6 right-6 z-50 bg-[#3498db] hover:bg-[#2980b9] rounded-full p-3 shadow-lg"
           onClick={scrollToTop}
         >
           <ArrowUp className="h-5 w-5" />
