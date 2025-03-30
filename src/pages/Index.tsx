@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import MinecraftBackground from "@/components/MinecraftBackground";
 import PlayerModal from "@/components/PlayerModal";
 import OnlineCounter from "@/components/OnlineCounter";
-import { ArrowUp, Discord } from "lucide-react";
+import { ArrowUp, MessageSquare } from "lucide-react";
 
 const APIS = {
   current: 'https://api.coralmc.it/api/leaderboard/bedwars/winstreak',
@@ -166,7 +166,7 @@ const Index = () => {
             rel="noopener noreferrer"
             className="discord-button flex items-center justify-center gap-2 mx-auto mb-4"
           >
-            <Discord className="h-5 w-5" />
+            <MessageSquare className="h-5 w-5" />
             Join our Discord server
           </a>
           
