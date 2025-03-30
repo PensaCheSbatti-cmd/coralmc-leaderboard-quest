@@ -1,6 +1,9 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @layer base {
   :root {
@@ -34,59 +37,34 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --mc-green: 122 71% 42%;
+    --mc-dark-green: 122 41% 39%;
+    --mc-stone: 0 0% 46%;
+    --mc-dark-stone: 0 0% 26%;
+    --mc-gold: 50 100% 50%;
+    --mc-red: 0 100% 63%;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -97,5 +75,114 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Press Start 2P', cursive;
   }
+}
+
+@layer components {
+  .minecraft-panel {
+    @apply bg-black/70 backdrop-blur-sm border-4 border-mc-dark-green p-6 md:p-8 rounded-lg shadow-[0_0_20px_rgba(76,175,80,0.3)] relative overflow-hidden;
+  }
+  
+  .minecraft-button {
+    @apply bg-mc-green border-4 border-mc-dark-green text-white px-4 py-2 rounded shadow transition-all relative overflow-hidden
+    hover:bg-mc-dark-green hover:translate-y-[-2px] hover:shadow-[0_5px_15px_rgba(76,175,80,0.3)]
+    active:translate-y-[1px] disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .minecraft-input {
+    @apply bg-black/60 backdrop-blur-sm border-4 border-mc-stone text-white px-4 py-3 rounded font-minecraft transition-all
+    focus:border-mc-green focus:shadow-[0_0_10px_rgba(76,175,80,0.5)] focus:outline-none;
+  }
+  
+  .status-bar {
+    @apply bg-black/80 backdrop-blur-sm p-2 md:p-3 text-sm md:text-base rounded;
+  }
+  
+  .section-divider {
+    @apply h-1 bg-mc-green my-6 relative overflow-hidden rounded;
+  }
+  
+  .section-divider::after {
+    content: '';
+    @apply absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent;
+    animation: dividerFlow 2s infinite;
+  }
+  
+  .discord-button {
+    @apply bg-[#5865F2] text-white px-4 py-2 rounded-md inline-flex items-center gap-2 transition-all hover:bg-[#4752C4] hover:shadow-lg;
+  }
+  
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+  
+  .font-minecraft {
+    font-family: 'Press Start 2P', cursive;
+  }
+}
+
+@layer utilities {
+  .text-mc-green {
+    color: #4CAF50;
+  }
+  
+  .text-mc-dark-green {
+    color: #388E3C;
+  }
+  
+  .text-mc-stone {
+    color: #757575;
+  }
+  
+  .text-mc-dark-stone {
+    color: #424242;
+  }
+  
+  .text-mc-gold {
+    color: #FFD700;
+  }
+  
+  .text-mc-red {
+    color: #ff4444;
+  }
+  
+  .bg-mc-green {
+    background-color: #4CAF50;
+  }
+  
+  .bg-mc-dark-green {
+    background-color: #388E3C;
+  }
+  
+  .bg-mc-stone {
+    background-color: #757575;
+  }
+  
+  .bg-mc-dark-stone {
+    background-color: #424242;
+  }
+  
+  .border-mc-green {
+    border-color: #4CAF50;
+  }
+  
+  .border-mc-dark-green {
+    border-color: #388E3C;
+  }
+  
+  .border-mc-stone {
+    border-color: #757575;
+  }
+  
+  .border-mc-dark-stone {
+    border-color: #424242;
+  }
+}
+
+@keyframes dividerFlow {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Minecraft themed colors
+				'mc-green': 'hsl(var(--mc-green))',
+				'mc-dark-green': 'hsl(var(--mc-dark-green))',
+				'mc-stone': 'hsl(var(--mc-stone))',
+				'mc-dark-stone': 'hsl(var(--mc-dark-stone))',
+				'mc-gold': 'hsl(var(--mc-gold))',
+				'mc-red': 'hsl(var(--mc-red))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
