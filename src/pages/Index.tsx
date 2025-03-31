@@ -6,7 +6,7 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import PlayerModal from "@/components/PlayerModal";
 import OnlineCounter from "@/components/OnlineCounter";
-import backgroundImage from '../assets/background.jpg';
+// Import a default background color instead of an image
 import { useLeaderboardData } from "@/hooks/useLeaderboardData";
 import { usePagination } from "@/hooks/usePagination";
 import { usePlayerSelection } from "@/hooks/usePlayerSelection";
@@ -57,7 +57,7 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#051428] to-[#020a14]" ref={containerRef}>
-      <div className="absolute inset-0 bg-cover bg-center opacity-20 z-0 bg-fixed" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+      <div className="absolute inset-0 bg-cover bg-center opacity-20 z-0 bg-fixed bg-[#041020]"></div>
       
       <div className="max-w-6xl mx-auto px-4 py-8 relative z-10">
         <div className="bg-[#0a2956]/90 backdrop-blur-sm border border-[#3498db]/30 rounded-lg p-6 mb-8 shadow-xl">
