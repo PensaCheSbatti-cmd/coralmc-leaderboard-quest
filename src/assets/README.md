@@ -1,9 +1,12 @@
 
 # Background Image
 
-To use your own background image:
+Place your custom `background.jpg` file in this directory to customize the background of the application.
 
-1. Place an image file named `background.jpg` in this directory (`src/assets/`)
-2. The image will automatically be used as the background for the application
+## Requirements:
+- File must be named `background.jpg`
+- Recommended size: at least 1920x1080px
+- Format: JPG
+- Keep file size reasonable (under 2MB) for optimal loading performance
 
-If no image is provided, the application will use a default background color.
+If no image is provided, the application will use a default gradient background.

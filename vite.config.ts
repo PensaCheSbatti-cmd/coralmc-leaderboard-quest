@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/coralmc-leaderboard-quest/", // Add slash before and after repo name
+  base: "/coralmc-leaderboard-quest/", // Keep the slashes before and after
   server: {
     host: "::",
     port: 8080,
@@ -19,5 +19,10 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    sourcemap: mode !== "production",
   },
 }));
